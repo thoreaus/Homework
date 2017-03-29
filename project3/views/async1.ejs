@@ -6,6 +6,7 @@
 </head>
   <body class="container">
     <header>
+        <ul>
         <% include header %>
         <style>
           h1, h2, p {
@@ -23,18 +24,72 @@
             <h1>Welcome to Vic Car Rentals</h1>
             <p>Look up Cars!</p>
         </div>
+        
         <form action="/query" method="post">
-            <h2>Query</h2>
+            <h2>Search from our inventory</h2>
             <label for="queryStr">Search:</label>
             <input id="queryStr" type="text" name="queryStr" placeholder="enter name">
             <button id="execute" type="submit">run query</button>
         </form>
-        <h2>Results</h2>
-        <ul>
-            <% listings.forEach(function(item) { %>
+        <h3>Results:</h3>
+        <ul><% listings.forEach(function(item) { %>
                 <li><%= item.make %> - <%= item.price %></li>
             <% }); %>
         </ul>
     </main>
+        <h4>Found the car you want? </h2>
+           <h4> Call 250-885-9124 to book it!</h2>
   </body>
+    <h2>Where to Locate Us:</h2>
+<div>
+
+  <div id="map" style="width: 500px; height: 400px;">
+
+<script src="https://maps.google.com/maps/api/js?key=AIzaSyB3hUGDHK06gZ7utwBEAu8cbt21WlUAFFs"></script>
+
+</div>
+    
+<script>
+var count = 0;
+var locations = [
+    [
+        "Victoria Car Rentals",
+        48.463997,
+         -123.311609
+    ]
+
+]
+
+    var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 15,
+      center: new google.maps.LatLng(48.463649,  -123.311951),
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    });
+
+    var infowindow = new google.maps.InfoWindow();
+
+    var marker, i;
+
+    for (i = 0; i < locations.length; i++) {  
+      marker = new google.maps.Marker({
+        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+        map: map
+      });
+
+      google.maps.event.addListener(marker, 'click', (function(marker, i) {
+        return function() {
+            count++;
+          infowindow.setContent(locations[i][0]);
+          infowindow.open(map, marker);
+
+
+        }
+      })(marker, i));
+        
+    }
+     google.maps.event.addListener(map, 'bounds_changed', function(){
+         console.log(map.getBounds().toString());
+     });
+</script>
+</div>
 </html>
